@@ -13,9 +13,9 @@ def load_data(filename):
         return [(tokenize(row['text']), row['label']) for row in reader]
 
 def train_naive_bayes(train_data):
-    # Count classes and words per class
+    
     class_counts = Counter()
-    word_counts = {} # {label: {word: count}}
+    word_counts = {} 
     vocab = set()
     
     for words, label in train_data:
@@ -34,13 +34,13 @@ def classify(doc, class_counts, word_counts, vocab):
     max_prob = -float('inf')
     
     for label in class_counts:
-        # Start with log(P(Class)) to avoid underflow
+   
         log_prob = math.log(class_counts[label] / total_docs)
         
-        # Total words in this class (for denominator)
+    
         total_words_in_class = sum(word_counts[label].values())
         
-        # P(word|class) with Laplace smoothing
+     
         for word in doc:
             if word in vocab:
                 count = word_counts[label].get(word, 0) + 1
@@ -54,7 +54,7 @@ def classify(doc, class_counts, word_counts, vocab):
     return best_label
 
 def calculate_metrics(test_data, class_counts, word_counts, vocab):
-    # We will measure for the 'tech' class
+ 
     target_class = 'tech'
     tp = fp = fn = tn = 0
     
@@ -72,9 +72,9 @@ def calculate_metrics(test_data, class_counts, word_counts, vocab):
     
     return accuracy, precision, recall
 
-# Execution
+
 data = load_data('training_data_set_for_ex_5.csv')
-# Split 75% train, 25% test
+
 split = int(len(data) * 0.75)
 train_set, test_set = data[:split], data[split:]
 
