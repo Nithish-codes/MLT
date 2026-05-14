@@ -10,45 +10,45 @@ def load_data(filename):
 def euclidean_distance(p1, p2):
     return math.sqrt(sum((p1[i] - p2[i])**2 for i in range(len(p1))))
 
-# --- K-Means Algorithm ---
+
 def k_means(data, k, iterations=10):
-    # Randomly initialize centroids
+
     centroids = random.sample(data, k)
     
     for _ in range(iterations):
         clusters = [[] for _ in range(k)]
-        # Assignment step
+
         for point in data:
             distances = [euclidean_distance(point, c) for c in centroids]
             cluster_idx = distances.index(min(distances))
             clusters[cluster_idx].append(point)
         
-        # Update step
+
         for i in range(k):
             if clusters[i]:
                 centroids[i] = [sum(p[j] for p in clusters[i])/len(clusters[i]) for j in range(2)]
     return clusters, centroids
 
-# --- EM Algorithm (Simplified GMM approach) ---
+
 def em_algorithm(data, k, iterations=10):
-    # Initialize means randomly, and set a fixed variance
+
     means = random.sample(data, k)
     weights = [1/k] * k
     
     for _ in range(iterations):
-        # E-Step: Calculate probabilities (Responsibilities)
+
         responsibilities = []
         for point in data:
             probs = []
             for i in range(k):
-                # Simple Gaussian PDF (assuming variance=1 for simplicity)
+
                 dist = euclidean_distance(point, means[i])
                 prob = weights[i] * math.exp(-0.5 * dist**2)
                 probs.append(prob)
             total_prob = sum(probs)
             responsibilities.append([p/total_prob for p in probs])
             
-        # M-Step: Update means and weights
+
         for i in range(k):
             weighted_sum_x = 0
             weighted_sum_y = 0
@@ -63,7 +63,7 @@ def em_algorithm(data, k, iterations=10):
             
     return means, weights
 
-# --- Execution ---
+
 data = load_data('training_data_set_for_ex_7.csv')
 
 print("Running K-Means...")
