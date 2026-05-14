@@ -7,7 +7,7 @@ def load_dataset(filename):
     with open(filename, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            # Convert numeric columns to floats
+            
             features = [
                 float(row['sepal_length']), 
                 float(row['sepal_width']), 
@@ -26,17 +26,17 @@ def knn_classify(train_set, test_point, k):
         dist = euclidean_distance(test_point, train_point)
         distances.append((dist, label))
     
-    # Sort by distance and take the top k neighbors
+    
     distances.sort(key=lambda x: x[0])
     neighbors = [label for dist, label in distances[:k]]
     
-    # Return the most frequent label
+    
     return Counter(neighbors).most_common(1)[0][0]
 
-# --- Execution ---
+
 data = load_dataset('training_data_set_for_ex_8.csv')
 
-# Split data: Use first 4 for training, last 2 for testing
+
 train_data = data[:4]
 test_data = data[4:]
 k = 3
