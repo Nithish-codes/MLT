@@ -6,7 +6,7 @@ def load_data(filename):
         return list(reader)
 
 def diagnose(data, symptoms):
-    # 1. Calculate Prior Probabilities: P(Corona=1) and P(Corona=0)
+    
     total = len(data)
     corona_pos = [row for row in data if row['Corona'] == '1']
     corona_neg = [row for row in data if row['Corona'] == '0']
@@ -14,30 +14,29 @@ def diagnose(data, symptoms):
     p_corona = len(corona_pos) / total
     p_no_corona = len(corona_neg) / total
     
-    # 2. Calculate Likelihoods for each symptom
-    # P(Symptom | Corona)
+    
     prob_pos = p_corona
     prob_neg = p_no_corona
     
     for symptom, value in symptoms.items():
-        # Count how many people with Corona have this specific symptom value
+       
         pos_match = len([r for r in corona_pos if r[symptom] == str(value)])
         neg_match = len([r for r in corona_neg if r[symptom] == str(value)])
         
-        # Apply Laplace Smoothing to avoid multiplying by zero
+        
         prob_pos *= (pos_match + 1) / (len(corona_pos) + 2)
         prob_neg *= (neg_match + 1) / (len(corona_neg) + 2)
         
-    # 3. Normalize to get actual percentages
+    
     total_prob = prob_pos + prob_neg
     final_score = prob_pos / total_prob
     
     return final_score
 
-# --- Execution ---
+
 dataset = load_data('training_data_set_for_ex_6.csv')
 
-# Test Patient: Fever=1, Cough=0, BreathBreath=1
+
 patient_symptoms = {'Fever': 1, 'Cough': 0, 'BreathBreath': 1}
 
 probability = diagnose(dataset, patient_symptoms)
